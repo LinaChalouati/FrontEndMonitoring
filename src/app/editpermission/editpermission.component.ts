@@ -442,6 +442,7 @@ setVisibility(){
           this.refresh();
           timer(3000)
 
+
           location.reload();
 
         },

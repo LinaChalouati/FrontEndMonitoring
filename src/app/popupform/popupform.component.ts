@@ -2,6 +2,9 @@ import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { Router } from '@angular/router';
 
 import { HttpClient } from '@angular/common/http';
+import { DataService } from '../services/data-service.service';
+import { ProjectService } from '../services/project.service';
+import { error } from 'jquery';
 
 
 
@@ -18,22 +21,32 @@ interface deploymentResponse{
   styleUrls: ['./popupform.component.css']
 })
 
-export class PopupformComponent {
+export class PopupformComponent implements OnInit {
 
   @Input() showPopup: boolean | undefined;
   @Output() closed = new EventEmitter<boolean>();
-  constructor(private router: Router,private http:HttpClient,private route : Router) { }
+  constructor(private router: Router,private http:HttpClient,private route : Router,private dataService:DataService,private projetService:ProjectService) { }
   Status=false;
   AlertMode=false;
   MonitoringMode=false;
   StatusHealthy=false;
+  userID: Number = 0;
 
+  ngOnInit(): void {
+    const userInfo = this.dataService.getUserInfo();
+    if (userInfo && userInfo.user && userInfo.user.id) {
+      this.userID = userInfo.user.id;
+    }
+    console.log("userID"+this.userID);
+
+  }
+  
 
   i=0;
   getInputs() {
     return this.inputs;
   }
-  
+
 
   closeModal() {
     console.log("Close button clicked");
@@ -64,7 +77,11 @@ export class PopupformComponent {
       this.connectivityfailed.splice(i,1);
 
     }
-   
+    projectID!:Number;
+   /*addUserToProject(){
+    this.projetService.addUserToProject(this.projectID,this.userID,"EDITOR");
+    
+   }*/
     monitoringMode(){
       this.MonitoringMode=true;
       console.log(this.MonitoringMode);
@@ -212,11 +229,21 @@ export class PopupformComponent {
           {   console.log("alert"+this.alerting);
 
 
-          this.http.post('http://localhost:8080/api/project/save-doproject', data).subscribe(response => {
+          this.http.post('http://localhost:8080/api/project/save-doproject', data).subscribe((response :any) => {
             toast.innerHTML = "Project Created !";
             toast.classList.remove("toast-failed");
             toast.classList.add("toast-success")
 
+            this.projectID = response; // Assign the response to projectID
+            this.projetService.addUserToProject(this.projectID, this.userID, "EDITOR").subscribe(
+              (response) => {
+                console.log("mrigllllllll");
+              },
+              (error) => {
+                console.error("moch mrigl");
+              }
+            );
+            
 
 
         this.router.navigate(['/draft',

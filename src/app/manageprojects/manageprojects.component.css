@@ -67,12 +67,12 @@ h2 small {
    }
 }
 .lemenuaction{
-    position: fixed;
+    position: relative;
     margin-top: -0.9rem;
 }
 .example-button-row button,
 .example-button-row a {
-position: fixed;
+position: relative;
 margin-top: -0.9rem;    
 
 }

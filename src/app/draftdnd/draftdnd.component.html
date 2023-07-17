@@ -8,6 +8,85 @@
       <br>
       <br>
       <ul>
+      <!--
+        <li>
+          <a (click)="showCustomizedMetrics(); getTheQueries()" [ngClass]="{'active': true}">Customized metric</a>
+          <ul class="sub-menu" *ngIf="isCustomizedMetrics">
+            <ng-container *ngFor="let category of categorizedQueriesKeys">
+              <ng-container *ngIf="categorizedQueries[category].length > 0">
+                <li>
+                  <b><a>{{ category }}</a></b>
+                  <ul class="sub-menu">
+                    <li *ngFor="let query of categorizedQueries[category]">
+                      <a (click)="showChartMenu(); getSelectedMetric('', query, false)">{{ query }}</a>
+                    </li>
+                  </ul>
+                </li>
+              </ng-container>
+            </ng-container>
+          </ul>
+        </li>
+      -->
+      <li>
+     <!--   <a (click)="showCustomizedMetrics(); getTheQueries()" [ngClass]="{'active': true}">Customized metric</a>
+        <ul class="sub-menu" *ngIf="isCustomizedMetrics">
+          <ng-container *ngFor="let category of categorizedQueriesKeys">
+            <ng-container *ngIf="category !== 'VM' && category !== 'Cluster' && categorizedQueries[category].length > 0">
+              <li>
+                <b><a>{{ category }}</a></b>
+                <ul class="sub-menu">
+                  <li *ngFor="let query of categorizedQueries[category]">
+                    <a (click)="showChartMenu(); getSelectedMetric('', query, false)">{{ query }}</a>
+                  </li>
+                </ul>
+              </li>
+            </ng-container>
+          </ng-container>
+        -->
+        <a (click)="showCustomizedMetrics(); getTheQueries()" [ngClass]="{'active': true}">Customized metric</a>
+        <ul class="sub-menu" *ngIf="isCustomizedMetrics">
+          <ng-container *ngFor="let category of categorizedQueriesKeys">
+            <ng-container *ngIf="category !== 'Custom' && categorizedQueries[category].length > 0">
+              <li>
+                <b><a>{{ category }}</a></b>
+                <ul class="sub-menu">
+                  <li *ngFor="let query of categorizedQueries[category]">
+                    <a (click)="showChartMenu(); getSelectedMetric('', query, false)">{{ query }}</a>
+                  </li>
+                </ul>
+              </li>
+            </ng-container>
+          </ng-container>
+      
+          <!-- VM Category -->
+          <ng-container *ngIf="categorizedQueries['VM'] && categorizedQueries['VM'].length > 0">
+            <li>
+              <b><a>VM</a></b>
+              <ul class="sub-menu">
+                <li *ngFor="let query of categorizedQueries['VM']">
+                  <a (click)="showChartMenu(); getSelectedMetric('', query, false)">{{ query }}</a>
+                </li>
+              </ul>
+            </li>
+          </ng-container>
+          <!-- Cluster Category -->
+          <ng-container *ngIf="categorizedQueries['Cluster'] && categorizedQueries['Cluster'].length > 0">
+            <li>
+              <b><a>Cluster</a></b>
+              <ul class="sub-menu">
+                <li *ngFor="let query of categorizedQueries['Cluster']">
+                  <a (click)="showChartMenu(); getSelectedMetric('', query, false)">{{ query }}</a>
+                </li>
+              </ul>
+            </li>
+          </ng-container>
+        </ul>
+      </li>
+      
+
+        
+        <br>
+
         <li>
           <a (click)="showBasicSubMenu()" [ngClass]="{'active': true}" #basic>Basic Metrics</a>
           <ul class="sub-menu" *ngIf="isBasicSubMenuOpen">
@@ -205,6 +284,7 @@
             <!-- Add more advanced menu items and their corresponding submenus here -->
           </ul>
         </li>
+   
       </ul>
       
   

@@ -97,8 +97,11 @@ addToggle()
     this.router.navigate(['/home']); 
    }
    editPermission(project:ProjectDTO){
-    this.router.navigate(['/editpermission']); 
     this.stateService.setProject(project);
+    console.log("project"+project.id)
+    console.log("project"+this.stateService.getProject()?.id)
+
+    this.router.navigate(['/editpermission']); 
    }
    fetchProjects(): void {
     this.projectService.getAllProjects()

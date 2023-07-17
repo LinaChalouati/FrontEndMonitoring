@@ -272,7 +272,18 @@ constructor(private router: Router, private http: HttpClient, private activatedR
       }
      
 
-      timer(100)
+  timer(100)
+  .pipe(
+    concatMap(() => this.http.post('http://localhost:8080/panel', null, { params: { dashboardTitle, PanelTitle, target, panelChart, ip, port, tag } })),
+    catchError((error) => {
+      console.error('Error adding panel:', error);
+      return throwError(error);
+    })
+  )
+  .subscribe(() => {
+    console.log('Panel added successfully.');
+  });
+     /* timer(100)
       this.http.post('http://localhost:8080/panel', null, { params: { dashboardTitle, PanelTitle, target, panelChart, ip, port, tag } })
       .pipe(
         catchError((error) => {
@@ -282,7 +293,7 @@ constructor(private router: Router, private http: HttpClient, private activatedR
       )
       .subscribe(() => {
         console.log('Panel added successfully.');
-      });
+      });*/
     
     }
   

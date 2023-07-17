@@ -10,6 +10,7 @@ import { catchError, concatMap, delay } from 'rxjs/operators';
 import { ActivatedRoute } from '@angular/router';
 import { DataService } from '../services/data-service.service';
 
+import { forkJoin } from 'rxjs';
 
 interface Droppedchart {
   positionX: number;
@@ -26,6 +27,13 @@ interface MsDroppedColumns {
 
 interface DashboardUidResponse {
   uid: string;
+}
+interface QueryInfo {
+  queryMap: { [queryName: string]: string };
+}
+
+interface CategorizedQueries {
+  [category: string]: string[];
 }
 
 @Component({
@@ -59,6 +67,281 @@ export class DraftdndComponent implements OnInit{
   isAppResourcesSubMenuOpen = false;
   isJVMetricsSubMenuOpen = false;
   isAdvancedMetric=false;
+  isCustomizedMetrics=false;
+
+
+
+  CustomQueries!: string[];
+
+  getTheQueries() {
+    console.log("clicked");
+    const url = 'http://localhost:8080/api/prometheus/query/instance_metrics';
+    this.http.get<QueryInfo>(url, { params: { instances: this.ipAddressesArray } }).subscribe(
+      (response) => {
+        this.CustomQueries = Object.keys(response.queryMap);
+        this.categorizedQueries = this.categorizeQueries();
+        this.categorizedQueriesKeys = Object.keys(this.categorizedQueries);
+        console.log("Categorized Queries:", this.categorizedQueries);
+      },
+      (error) => {
+        console.error('An error occurred:', error);
+      }
+    );
+  }
+  
+  
+  categories: string[] = [
+    'Process',
+    'Network',
+    'CPU',
+    'Memory',
+    'Disk',
+    'Database',
+    'Application',
+    'Server',
+    'Security',
+    'Storage',
+    'Services',
+    'VM',
+    'Error',
+    'Logs',
+    'Backup',
+    'Custom',
+    'API Gateway',
+    'Load Balancer',
+    'Security Audit',
+    'Database Replication',
+    'File System',
+    'Cache',
+    'CDN Cache',
+    'Virtualization',
+    'Identity and Access Management',
+    'Middleware',
+    'Cluster Overview',
+    'Nodes',
+    'Pods',
+    'Deployments',
+    'Services',
+    'Ingress',
+    'Configurations',
+    'Events',
+    'Autoscaling',
+    'Monitoring and Logging',
+    'Frequency',
+    'Aggregate'
+  ];
+  
+  categorizedQueries: { [key: string]: string[] } = {};
+  categorizedQueriesKeys: string[] = [];
+  
+
+  categorizeQueries() {
+    this.categorizedQueries = {};
+    for (const category of this.categories) {
+      this.categorizedQueries[category] = [];
+    }
+  
+    for (const query of this.CustomQueries) {
+      let matchedCategory = 'Custom'; // Default category for unmatched queries
+  
+      if (query.includes('network') || query.includes('Network') || query.includes('net') || query.includes('http')) {
+        matchedCategory = 'Network';
+      } else if (query.includes('cpu') || query.includes('CPU')) {
+        matchedCategory = 'CPU';
+      } else if (query.includes('memory') || query.includes('Memory')) {
+        matchedCategory = 'Memory';
+      } else if (query.includes('disk') || query.includes('Disk')) {
+        matchedCategory = 'Disk';
+      } else if (query.includes('database') || query.includes('Database')) {
+        matchedCategory = 'Database';
+      } else if (query.includes('App') || query.includes('app') || query.includes('application') || query.includes('Application')) {
+        matchedCategory = 'Application';
+      } else if (query.includes('server') || query.includes('Server')) {
+        matchedCategory = 'Server';
+      } else if (query.includes('security') || query.includes('Security')) {
+        matchedCategory = 'Security';
+      } else if (query.includes('storage') || query.includes('Storage')) {
+        matchedCategory = 'Storage';
+      } else if (query.includes('services') || query.includes('Services')) {
+        matchedCategory = 'Services';
+      } else if (query.includes('Vm') || query.includes('VM') || query.includes('vm')) {
+        matchedCategory = 'VM';
+      } else if (query.includes('process') || query.includes('Process')) {
+        matchedCategory = 'Process';
+      } else if (query.includes('Error') || query.includes('error')) {
+        matchedCategory = 'Error';
+      } else if (query.includes('Logs') || query.includes('logs')) {
+        matchedCategory = 'Logs';
+      } else if (query.includes('Backup') || query.includes('backup')) {
+        matchedCategory = 'Backup';
+      } else if (query.includes('API Gateway') || query.includes('api gateway')) {
+        matchedCategory = 'API Gateway';
+      } else if (query.includes('Load Balancer') || query.includes('load balancer')) {
+        matchedCategory = 'Load Balancer';
+      } else if (query.includes('Security Audit') || query.includes('security audit')) {
+        matchedCategory = 'Security Audit';
+      } else if (query.includes('Database Replication') || query.includes('database replication')) {
+        matchedCategory = 'Database Replication';
+      } else if (query.includes('File System') || query.includes('file system')) {
+        matchedCategory = 'File System';
+      } else if (query.includes('Cache') || query.includes('cache')) {
+        matchedCategory = 'Cache';
+      } else if (query.includes('CDN Cache') || query.includes('cdn cache')) {
+        matchedCategory = 'CDN Cache';
+      } else if (query.includes('Virtualization') || query.includes('virtualization')) {
+        matchedCategory = 'Virtualization';
+      } else if (query.includes('Identity and Access Management') || query.includes('identity and access management')) {
+        matchedCategory = 'Identity and Access Management';
+      } else if (query.includes('Middleware') || query.includes('middleware')) {
+        matchedCategory = 'Middleware';
+      }
+      else if (query.includes('Count') || query.includes('count')) {
+        matchedCategory = 'Frequency';
+      }
+      else if (query.includes('Total') || query.includes('total')) {
+        matchedCategory = 'Aggregate';
+      }
+  
+      this.categorizedQueries[matchedCategory].push(query);
+    }
+  
+    // Sort the queries within each category
+    for (const category of this.categories) {
+      this.categorizedQueries[category].sort();
+    }
+  
+    // Separate VM and Cluster categories
+    const vmCategory = 'VM';
+    const clusterCategory = 'Cluster';
+    const vmQueries = this.categorizedQueries[vmCategory];
+    const clusterQueries = this.categorizedQueries[clusterCategory];
+  
+    // Remove VM and Cluster categories from the main categorizedQueries
+    delete this.categorizedQueries[vmCategory];
+    delete this.categorizedQueries[clusterCategory];
+  
+    // Add VM and Cluster categories with their queries separately
+    this.categorizedQueries[vmCategory] = vmQueries;
+    this.categorizedQueries[clusterCategory] = clusterQueries;
+  
+    // Get the keys of the categorizedQueries object
+    this.categorizedQueriesKeys = Object.keys(this.categorizedQueries);
+  
+    return this.categorizedQueries;
+  }
+  
+  /*
+  categorizeQueries() {
+    this.categorizedQueries = {};
+  
+    for (const category of this.categories) {
+      this.categorizedQueries[category] = [];
+    }
+  
+    for (const query of this.CustomQueries) {
+      let matchedCategory = 'Custom'; // Default category for unmatched queries
+  
+      if (query.includes('network') || query.includes('Network') || query.includes('net') || query.includes('http')) {
+        matchedCategory = 'Network';
+      } else if (query.includes('cpu') || query.includes('CPU')) {
+        matchedCategory = 'CPU';
+      } else if (query.includes('memory') || query.includes('Memory')) {
+        matchedCategory = 'Memory';
+      } else if (query.includes('disk') || query.includes('Disk')) {
+        matchedCategory = 'Disk';
+      } else if (query.includes('database') || query.includes('Database')) {
+        matchedCategory = 'Database';
+      } else if (query.includes('App') || query.includes('app') || query.includes('application') || query.includes('Application')) {
+        matchedCategory = 'Application';
+      } else if (query.includes('server') || query.includes('Server')) {
+        matchedCategory = 'Server';
+      } else if (query.includes('security') || query.includes('Security')) {
+        matchedCategory = 'Security';
+      } else if (query.includes('storage') || query.includes('Storage')) {
+        matchedCategory = 'Storage';
+      } else if (query.includes('services') || query.includes('Services')) {
+        matchedCategory = 'Services';
+      } else if (query.includes('Vm') || query.includes('VM') || query.includes('vm')) {
+        matchedCategory = 'VM';
+      } else if (query.includes('process') || query.includes('Process')) {
+        matchedCategory = 'Process';
+      } else if (query.includes('Error') || query.includes('error')) {
+        matchedCategory = 'Error';
+      } else if (query.includes('Logs') || query.includes('logs')) {
+        matchedCategory = 'Logs';
+      } else if (query.includes('Backup') || query.includes('backup')) {
+        matchedCategory = 'Backup';
+      } else if (query.includes('API Gateway') || query.includes('api gateway')) {
+        matchedCategory = 'API Gateway';
+      } else if (query.includes('Load Balancer') || query.includes('load balancer')) {
+        matchedCategory = 'Load Balancer';
+      } else if (query.includes('Security Audit') || query.includes('security audit')) {
+        matchedCategory = 'Security Audit';
+      } else if (query.includes('Database Replication') || query.includes('database replication')) {
+        matchedCategory = 'Database Replication';
+      } else if (query.includes('File System') || query.includes('file system')) {
+        matchedCategory = 'File System';
+      } else if (query.includes('Cache') || query.includes('cache')) {
+        matchedCategory = 'Cache';
+      } else if (query.includes('CDN Cache') || query.includes('cdn cache')) {
+        matchedCategory = 'CDN Cache';
+      } else if (query.includes('Virtualization') || query.includes('virtualization')) {
+        matchedCategory = 'Virtualization';
+      } else if (query.includes('Identity and Access Management') || query.includes('identity and access management')) {
+        matchedCategory = 'Identity and Access Management';
+      } else if (query.includes('Middleware') || query.includes('middleware')) {
+        matchedCategory = 'Middleware';
+      } else if (query.includes('Cluster Overview') || query.includes('cluster overview')) {
+        matchedCategory = 'Cluster Overview';
+      } else if (query.includes('Nodes') || query.includes('nodes')) {
+        matchedCategory = 'Nodes';
+      } else if (query.includes('Pods') || query.includes('pods')) {
+        matchedCategory = 'Pods';
+      } else if (query.includes('Deployments') || query.includes('deployments')) {
+        matchedCategory = 'Deployments';
+      } else if (query.includes('Services') || query.includes('services')) {
+        matchedCategory = 'Services';
+      } else if (query.includes('Ingress') || query.includes('ingress')) {
+        matchedCategory = 'Ingress';
+      } else if (query.includes('Configurations') || query.includes('configurations')) {
+        matchedCategory = 'Configurations';
+      } else if (query.includes('Events') || query.includes('events')) {
+        matchedCategory = 'Events';
+      } else if (query.includes('Autoscaling') || query.includes('autoscaling')) {
+        matchedCategory = 'Autoscaling';
+      } else if (query.includes('Monitoring and Logging') || query.includes('monitoring and logging')) {
+        matchedCategory = 'Monitoring and Logging';
+      }
+  
+      this.categorizedQueries[matchedCategory].push(query);
+    }
+  
+    // Sort the queries within each category
+    for (const category of this.categories) {
+      this.categorizedQueries[category].sort();
+    }
+  
+    // Remove empty categories
+    this.categorizedQueriesKeys = Object.keys(this.categorizedQueries).filter(
+      category => this.categorizedQueries[category].length > 0
+    );
+  
+    // Check if all categories are empty
+    const allCategoriesEmpty = this.categorizedQueriesKeys.length === 0;
+  
+    // If all categories are empty, reset the categorizedQueries and categorizedQueriesKeys
+    if (allCategoriesEmpty) {
+      this.categorizedQueries = {};
+      this.categorizedQueriesKeys = [];
+    }
+  
+    return this.categorizedQueries;
+  }
+
+  */
+      showCustomizedMetrics(){
+  this.isCustomizedMetrics=!this.isCustomizedMetrics;
+  }
 
   showBasicSubMenu() {
     this.isBasicSubMenuOpen = !this.isBasicSubMenuOpen;
@@ -460,14 +743,11 @@ return match ? match[1] : '';
 
 saving=false;
 saveData() {
-
-
   this.addGenericPanels();
-  timer(3000)
   const dashboardTitle = this.projectName;
   const columns = this.MsColumns;
   const advancedColumns = this.AdvancedMsColumns;
-  this.dataService.advancedMetricselected=this.AdvancedMsColumns;
+  this.dataService.advancedMetricselected = this.AdvancedMsColumns;
   console.log("hereee" + columns);
 
   if (columns && columns.length > 0) {
@@ -477,8 +757,8 @@ saveData() {
     const ipAddressesArray2 = this.ipAddressesArray[0];
 
     if (this.appType.includes("Monolithic app")) {
-      columns.forEach((column, index) => {
-        console.log(`id: ${column.id}, column: ${column.column},title:${column.title}, metric: ${column.metric}`);
+      const panelRequests = columns.map((column, index) => {
+        console.log(`id: ${column.id}, column: ${column.column}, title: ${column.title}, metric: ${column.metric}`);
         const PanelTitle = column.title;
         const target = column.metric;
         const panelChart = column.column.toString();
@@ -486,115 +766,117 @@ saveData() {
         const port = this.ipAddressAndPort[0].port;
         const tag = column.id;
 
-        timer(index * 100)
-          .pipe(
-            concatMap(() => this.http.post('http://localhost:8080/api/grafana/panel', null, { params: { dashboardTitle, PanelTitle, target, panelChart, ip, port, tag } })),
-            catchError((error) => {
-              console.error('Error adding panel:', error);
-              return throwError(error);
-            })
-          )
-          .subscribe(() => {
-            console.log('Panel added successfully.');
-          });
+        return timer(index * 100).pipe(
+          concatMap(() => this.http.post('http://localhost:8080/api/grafana/panel', null, { params: { dashboardTitle, PanelTitle, target, panelChart, ip, port, tag } })),
+          catchError((error) => {
+            console.error('Error adding panel:', error);
+            return throwError(error);
+          })
+        );
+      });
 
-        console.log("fl save" + this.ipAddressesArray);
-        timer(2000).subscribe(() => {
-          console.log("fl save" + this.ipAddressesArray);
-          console.log("advancedColumns"+advancedColumns);
+      forkJoin(panelRequests).subscribe(
+        () => {
+          console.log('All panels added successfully.');
+
+          timer(2000).subscribe(() => {
+            //console.log("fl save" + this.ipAddressesArray);
+            //console.log("advancedColumns" + advancedColumns);
+
+            if (advancedColumns && advancedColumns.length > 0) {
+              console.log("hereee");
+              this.router.navigate(['/advancedsettings', {
+                projectName: this.projectName,
+                ipAddressesArray: this.ipAddressesArray,
+                nbms: this.taille,
+                appType: this.appType,
+                advancedMetricselected: JSON.stringify(this.dataService.advancedMetricselected),
+                alertMode: this.alertMode
+              }]);
+            } else {
+              if (this.alertMode == true) {
+                this.router.navigate(['/addalert', {
+                  projectName: this.projectName,
+                  ipAddressesArray: this.ipAddressesArray,
+                  nbms: this.taille,
+                  appType: this.appType,
+                }]);
+              } else {
+                this.router.navigate(['/dashboard', {
+                  projectName: this.projectName,
+                  ipAddressesArray: this.ipAddressesArray,
+                  deployment: this.deployment,
+                  appType: this.appType,
+                  nbms: this.taille
+                }]);
+              }
+            }
+          });
+        },
+        (error) => {
+          console.error('Error adding panels:', error);
+          // Handle the error if necessary
+        }
+      );
+    } else {
+      const panelRequests = columns.map((column, index) => {
+        console.log(`id: ${column.id}, column: ${column.column}, title: ${column.title}, metric: ${column.metric}`);
+        const PanelTitle = column.title;
+        const target = column.metric;
+        const panelChart = column.column.toString();
+        const ip = this.ipAddressAndPort[0].ip;
+        const port = this.ipAddressAndPort[0].port;
+        const tag = column.id;
+
+        return timer(index * 100).pipe(
+          concatMap(() => this.http.post('http://localhost:8080/api/grafana/panel', null, { params: { dashboardTitle, PanelTitle, target, panelChart, ip, port, tag } })),
+          catchError((error) => {
+            console.error('Error adding panel:', error);
+            return throwError(error);
+          })
+        );
+      });
+
+      forkJoin(panelRequests).subscribe(
+        () => {
+          console.log('All panels added successfully.');
 
           if (advancedColumns && advancedColumns.length > 0) {
-            console.log("hereee");
             this.router.navigate(['/advancedsettings', {
               projectName: this.projectName,
               ipAddressesArray: this.ipAddressesArray,
               nbms: this.taille,
               appType: this.appType,
               advancedMetricselected: JSON.stringify(this.dataService.advancedMetricselected),
-              alertMode:this.alertMode
-
+              alertMode: this.alertMode
             }]);
-          } 
-          else {
-            if (this.alertMode==true) {
+          } else {
+            if (this.alertMode == true) {
               this.router.navigate(['/addalert', {
                 projectName: this.projectName,
                 ipAddressesArray: this.ipAddressesArray,
                 nbms: this.taille,
                 appType: this.appType,
+                alertMode: this.alertMode
               }]);
             } else {
-              this.router.navigate(['/dashboard', {
-                projectName: this.projectName,
-                ipAddressesArray: this.ipAddressesArray,
-                deployment: this.deployment,
-                appType: this.appType,
-                nbms: this.taille
-              }]);
+              timer(2000).subscribe(() => {
+                this.router.navigate(['/dashboard', {
+                  projectName: this.projectName,
+                  ipAddressesArray: this.ipAddressesArray,
+                  appType: this.appType,
+                  nbms: this.taille,
+                  alertMode: this.alertMode
+                }]);
+              });
             }
           }
-        });
-      });
-    } 
-    
-    
-    else {
-      columns.forEach((column, index) => {
-        console.log(`id: ${column.id}, column: ${column.column},title:${column.title}, metric: ${column.metric}`);
-        const PanelTitle = column.title;
-        const target = column.metric;
-        const panelChart = column.column.toString();
-        const ip = this.ipAddressAndPort[0].ip;
-        const port = this.ipAddressAndPort[0].port;
-        const tag = column.id;
-
-        timer(index * 100)
-          .pipe(
-            concatMap(() => this.http.post('http://localhost:8080/api/grafana/panel', null, { params: { dashboardTitle, PanelTitle, target, panelChart, ip, port, tag } })),
-            catchError((error) => {
-              console.error('Error adding panel:', error);
-              return throwError(error);
-            })
-          )
-          .subscribe(() => {
-            console.log('Panel added successfully.');
-          });
-
-        if (advancedColumns && advancedColumns.length > 0) {
-          this.router.navigate(['/advancedsettings', {
-            projectName: this.projectName,
-            ipAddressesArray: this.ipAddressesArray,
-            nbms: this.taille,
-            appType: this.appType,
-            advancedMetricselected: JSON.stringify(this.dataService.advancedMetricselected),
-            alertMode:this.alertMode
-          }]);
+        },
+        (error) => {
+          console.error('Error adding panels:', error);
+          // Handle the error if necessary
         }
-        else {
-          if (this.alertMode==true) {
-            this.router.navigate(['/addalert', {
-              projectName: this.projectName,
-              ipAddressesArray: this.ipAddressesArray,
-              nbms: this.taille,
-              appType: this.appType,
-              alertMode:this.alertMode
-
-            }]);
-        }
-        else {
-          timer(2000).subscribe(() => {
-            this.router.navigate(['/dashboard', {
-              projectName: this.projectName,
-              ipAddressesArray: this.ipAddressesArray,
-              appType: this.appType,
-              nbms: this.taille,
-              alertMode:this.alertMode
-
-            }]);
-          });
-        }
-        } 
-      });
+      );
     }
   } else {
     if (advancedColumns && advancedColumns.length > 0) {
@@ -604,13 +886,11 @@ saveData() {
         nbms: this.taille,
         appType: this.appType,
         advancedMetricselected: JSON.stringify(this.dataService.advancedMetricselected),
-        alertMode:this.alertMode
-
+        alertMode: this.alertMode
       }]);
     }
   }
 }
-
 getIpAddress(){
   const ipAddressesArray=this.ipAddressesArray[0];
   console.log(ipAddressesArray);
