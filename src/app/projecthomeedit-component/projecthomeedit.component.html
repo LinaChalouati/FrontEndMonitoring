@@ -1,0 +1,303 @@
+<!-- SIDEBAR -->
+<section id="sidebar" [ngClass]="status ? 'hide' : ''">
+  <a  class="brand">
+  </a>
+  <ul class="side-menu top">
+    <li class="active">
+      <a >
+        <i class='bx bxs-dashboard' ></i>
+        <span class="text">Home</span>
+      </a>
+    </li>
+    <li >
+      <a (click)="goProfile()">
+        <i class='bx bxs-user' ></i>
+        <span class="text">Profile</span>
+      </a>
+    </li>
+    <li *ngIf="isUserAdmin==='ADMIN'" >
+      <a  (click)="goAdminsitration()">
+        <i class='bx bxs-folder' ></i>
+        <span class="text">Administration</span>
+      </a>
+    <li>
+      <a href="#">
+        <i class='bx bxs-doughnut-chart' ></i>
+        <span class="text">Help</span>
+      </a>
+    </li>
+
+
+  </ul>
+  <ul class="side-menu">
+    <li>
+      <a href="#">
+        <i class='bx bxs-cog' ></i>
+        <span class="text">Settings</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" class="logout">
+        <i class='bx bxs-log-out-circle' ></i>
+        <span class="text">Logout</span>
+      </a>
+    </li>
+  </ul>
+</section>
+<!-- SIDEBAR -->
+
+
+
+<!-- CONTENT -->
+<section id="content">
+  <!-- NAVBAR -->
+  <nav>
+    <i (click)="addToggle()" class='bx bx-menu' ></i>
+
+    <a  class="brand">
+      <span class="text"><h3> AES Monitoring Platform</h3></span>
+
+    </a>
+    <form></form>
+    <div class="menuitems">
+      <i class="bx bxs-home custom-icon" (click)="goHome()"></i>
+
+    </div>
+  </nav>
+  <!-- NAVBAR -->
+
+
+  <!-- MAIN -->
+
+
+  <main>
+    <div class="head-title">
+      <div class="left">
+
+        <h2>Project Permission Edit</h2>
+        <br>
+        <ul class="breadcrumb">
+          <li>
+            <a >Home</a>
+
+          </li>
+          <li><i class='bx bx-chevron-right' ></i></li>
+          <li>
+            <a >Projects</a>
+          </li>
+          <li><i class='bx bx-chevron-right' ></i></li>
+          <li>
+            <a class="active" >Project Edit</a>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+
+
+  </main>
+  <!-- MAIN -->
+</section>
+<div class="publicandprivate">
+  <h2>Permissions</h2>
+  <label class="example-margin">
+    <p> Grant and revoke project-level permissions. Permissions can be granted to groups or individual users.
+      <br>
+      This project is public. Anyone can browse and see its details.
+    </p>
+  </label>
+  <br>
+  <mat-radio-group class="custom-radio-group" [(ngModel)]="labelPosition">
+    <mat-radio-button class="example-margin" (click)="openDialog()" value="after">Public</mat-radio-button>
+    <mat-radio-button class="example-margin"  (click)="openDialog()" value="before">Private</mat-radio-button>
+  </mat-radio-group>
+
+
+
+</div>
+<br>
+<div class="permissiontable">
+  <mat-tab label="Users">
+    <ng-template matTabContent>
+      <div class="container">
+        <ul class="responsive-table">
+          <li class="table-header">
+            <div class="col col-2">Name</div>
+            <div class="col col-2">Email</div>
+
+            <div class="col col-3">Role</div>
+          </li>
+          <li class="table-row">
+            <div class="col col-2" data-label="Customer Name">@</div>
+            <div class="col col-2" data-label="Customer Name">Public</div>
+
+
+
+            <div class="col col-4" data-label="Payment Status">
+              <mat-form-field class="lemenuaction">
+                <mat-select placeholder="Editor" class="custom-select">
+                  <mat-option value="valid">Editor</mat-option>
+                  <mat-option value="invalid">Viewer</mat-option>
+                </mat-select>
+
+              </mat-form-field>
+
+            </div>
+          </li>
+
+        </ul>
+      </div>
+
+    </ng-template>
+  </mat-tab>
+</div>
+<div class="permissiontable">
+
+  <mat-tab-group class="custom-tab-group">
+    <mat-tab label="Users" >
+      <ng-template matTabContent>
+        <br>
+        <div class="container">
+          <ul class="responsive-table">
+            <li class="table-header">
+              <div class="col col-2">Name</div>
+              <div class="col col-2">Email</div>
+
+              <div class="col col-3">Role</div>
+              <div class="col col-4">Action</div>
+
+            </li>
+            <li class="table-row">
+              <div class="col col-2" data-label="Customer Name">@</div>
+              <div class="col col-2" data-label="Customer Name">Public</div>
+
+
+
+              <div class="col col-3" data-label="Payment Status">
+                <mat-form-field class="lemenuaction">
+                  <mat-select placeholder="Editor" class="custom-select">
+                    <mat-option value="valid">Editor</mat-option>
+                    <mat-option value="invalid">Viewer</mat-option>
+                  </mat-select>
+
+                </mat-form-field>
+
+              </div>
+              <div class="col col-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="red" d="M12 4c-4.419 0-8 3.582-8 8s3.581 8 8 8s8-3.582 8-8s-3.581-8-8-8zm3.707 10.293a.999.999 0 1 1-1.414 1.414L12 13.414l-2.293 2.293a.997.997 0 0 1-1.414 0a.999.999 0 0 1 0-1.414L10.586 12L8.293 9.707a.999.999 0 1 1 1.414-1.414L12 10.586l2.293-2.293a.999.999 0 1 1 1.414 1.414L13.414 12l2.293 2.293z"/></svg>
+              </div>
+
+            </li>
+
+          </ul>
+        </div>
+        <button class="btn2" #add (click)="openDialog2()">+</button>
+
+      </ng-template>
+    </mat-tab>
+    <mat-tab label="Teams">
+      <ng-template matTabContent>
+        <br>
+        <div class="container">
+          <ul class="responsive-table">
+            <li class="table-header">
+              <div class="col col-2">Name</div>
+              <div class="col col-2">Email</div>
+
+              <div class="col col-3">Role</div>
+              <div class="col col-4">Action</div>
+
+            </li>
+            <li class="table-row">
+              <div class="col col-2" data-label="Customer Name">@</div>
+              <div class="col col-2" data-label="Customer Name">Public</div>
+
+
+
+              <div class="col col-3" data-label="Payment Status">
+                <mat-form-field class="lemenuaction">
+                  <mat-select placeholder="Editor" class="custom-select">
+                    <mat-option value="valid">Editor</mat-option>
+                    <mat-option value="invalid">Viewer</mat-option>
+                  </mat-select>
+
+                </mat-form-field>
+
+              </div>
+              <div class="col col-4">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><path fill="red" d="M12 4c-4.419 0-8 3.582-8 8s3.581 8 8 8s8-3.582 8-8s-3.581-8-8-8zm3.707 10.293a.999.999 0 1 1-1.414 1.414L12 13.414l-2.293 2.293a.997.997 0 0 1-1.414 0a.999.999 0 0 1 0-1.414L10.586 12L8.293 9.707a.999.999 0 1 1 1.414-1.414L12 10.586l2.293-2.293a.999.999 0 1 1 1.414 1.414L13.414 12l2.293 2.293z"/></svg>
+
+              </div>
+
+            </li>
+
+          </ul>
+        </div>
+        <button class="btn2" #add (click)="openDialog3()">+</button>
+
+      </ng-template>
+    </mat-tab>
+
+  </mat-tab-group>
+</div>
+<div class="dialog-container" *ngIf="showDialog">
+  <div class="dialog-content">
+    <h2 class="dialog-title">Permission Confirmation</h2>
+    <p>Are you sure you want to change this project visibility.</p>
+    <div class="dialog-buttons">
+      <button mat-button (click)="setAnotherRule()">Yes</button>
+      <button mat-button (click)="closeDialog()">No</button>
+
+    </div>
+  </div>
+</div>
+<div class="dialog-container" *ngIf="showDialog2" >
+  <div class="dialog-content" >
+    <h2 class="dialog-title">Add Access to User</h2>
+    <mat-form-field >
+      <mat-label>Select User</mat-label>
+      <select matNativeControl required id="selectlist">
+        <option >User 1</option>
+        <option >User 2</option>
+      </select>
+    </mat-form-field>
+
+    <div class="dialog-buttons">
+      <button mat-button (click)="setAnotherRule()">Add</button>
+      <button mat-button (click)="closeDialog2()">Cancel</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="dialog-container" *ngIf="showDialog3" >
+  <div class="dialog-content">
+    <h2 class="dialog-title">Add Team to Project</h2>
+    <mat-form-field>
+      <label>Select Team</label>
+      <select matNativeControl required id="selectlist">
+        <mat-option value="option1">Team 1</mat-option>
+        <mat-option value="option2">Team 2</mat-option>
+        <mat-option value="option3">Team 3</mat-option>
+      </select>
+
+
+    </mat-form-field>
+    <div class="dialog-buttons">
+      <button mat-button >Yes</button>
+      <button mat-button (click)="closeDialog3()">No</button>
+
+    </div>
+  </div>
+</div>
+
+<!-- CONTENT -->
+<div class="toasts">
+  <div class="toast3" id="toast-message3"></div>
+
+  <div class="toast4" id="toast-message4"></div>
+  <div class="toast2" id="toast-message2"></div>
+  <div class="toast5" id="toast-message5"></div>
+  <div class="toast6" id="toast-message6"></div>
+
+</div>

@@ -1,0 +1,318 @@
+
+<body>
+  <!-- SIDEBAR -->
+  <section id="sidebar" [ngClass]="status ? 'hide' : ''">
+    <a href="#" class="brand"></a>
+    <ul class="side-menu top">
+      <li >
+        <a (click)="goDashboard()">
+          <i class='bx bxs-dashboard'></i>
+          <span class="text">Project OverView</span>
+        </a>
+      </li>
+      <li [class.active]="selectedItem === 1" (click)="selectItem(1)">
+        <a >
+          <i class='bx bxs-bell'></i>
+          <span class="text">Alerts</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class='bx bxs-shopping-bag-alt'></i>
+          <span class="text">Logs</span>
+        </a>
+      </li>
+      <li >
+        <a href="#">
+          <i class='bx bxs-doughnut-chart'></i>
+          <span class="text">Help</span>
+        </a>
+      </li>
+    </ul>
+    <ul class="side-menu">
+      <li>
+        <a href="#">
+          <i class='bx bxs-cog'></i>
+          <span class="text">Settings</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" class="logout">
+          <i class='bx bxs-log-out-circle'></i>
+          <span class="text">Logout</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+  <!-- SIDEBAR -->
+
+
+  <!-- SIDEBAR -->
+
+  <!-- CONTENT -->
+  <section id="content">
+
+    <!-- NAVBAR -->
+    <nav>
+      <i (click)="addToggle()" class='bx bx-menu' ></i>
+      <form >
+
+      </form>
+
+      <i class="bx bxs-home custom-icon" (click)="goHome()"></i>
+
+      <a  class="notification">
+
+        <i class='bx bxs-bell' ></i>
+        <span class="num">{{ nbAlerts }}</span>
+      </a>
+
+
+    </nav>
+    <!-- NAVBAR -->
+
+<!-- SIDE BAR FOR ALERT MAILS -->
+    <nav class="site-nav2" *ngIf="showInfoMenu">
+
+      <div class="icon-container">
+
+        <mat-icon [ngClass]="{'green-icon': iconState === 'alarm_on', 'grey-icon': iconState !== 'alarm_on'}">{{ iconState }}</mat-icon>
+        <h2>{{ alertName }}</h2>
+
+      </div>
+
+
+  <label class="inp">
+    <input type="text" placeholder="&nbsp;" [(ngModel)]="alertName" readonly="active">
+    <span class="label">Alert name</span>
+    <span class="focus-bg"></span>
+  </label>
+
+
+
+  <label class="inp">
+    <input type="text" placeholder="&nbsp;" [(ngModel)]="state" readonly="active">
+    <span class="label">State for this Alert</span>
+    <span class="focus-bg"></span>
+  </label>
+
+
+  <label class="inp">
+    <input type="text" placeholder="&nbsp;" [(ngModel)]="receiverName" readonly="active">
+    <span class="label">Team Name</span>
+    <span class="focus-bg"></span>
+  </label>
+
+    <label class="inp" *ngFor="let email of alertEmails">
+      <input type="text" [value]="email" readonly>
+      <span class="label">Receiver Email</span>
+      <span class="focus-bg"></span>
+    </label>
+
+    <a class="btn-download3" (click)="openInfo()">Cancel</a>
+
+
+
+
+
+</nav>
+
+<!-- ALERT EDIT SIDE MENU-->
+    <nav class="site-nav2" *ngIf="showAlertEditMenu">
+      <h2>{{alertName}}</h2>
+      <br>
+
+      <label class="inp">
+        <input type="text" id="inp-alert-name" placeholder="&nbsp;" [(ngModel)]="alertName">
+        <span class="label">Alert name</span>
+        <span class="focus-bg"></span>
+      </label>
+
+      <label class="inp">
+        <input type="text" id="inp-receiver-name" placeholder="&nbsp;" [(ngModel)]="receiverName">
+        <span class="label">{{receiverName}}</span>
+        <span class="focus-bg"></span>
+      </label>
+      <label class="inp" id="inp-receiver-name" placeholder="&nbsp;" [(ngModel)]="state">
+        <span class="label">{{state}}</span>
+        <span class="focus-bg"></span>
+      </label>
+
+      <label class="inp">
+        <input type="text" id="inp-receiver-email" placeholder="&nbsp;" [(ngModel)]="receiverEmail">
+        <span class="label">Receiver Email</span>
+        <span class="focus-bg"></span>
+      </label>
+
+      <label class="inp">
+        <input type="text" id="inp-team-name" placeholder="&nbsp;" [(ngModel)]="teamName">
+        <span class="label">Team Name Associated</span>
+        <span class="focus-bg"></span>
+      </label>
+
+      <label class="inp">
+        <input type="text" id="inp-new-receiver-email" placeholder="&nbsp;" [(ngModel)]="newReceiverEmail">
+        <span class="label">Add New Receiver Email</span>
+        <span class="focus-bg"></span>
+      </label>
+
+      <label class="inp">
+        <input type="text" id="inp-new-sender-email" placeholder="&nbsp;" [(ngModel)]="newSenderEmail">
+        <span class="label">New Sender Email</span>
+        <span class="focus-bg"></span>
+      </label>
+
+      <a class="btn-download3" (click)="openAlertEditMenu()">Cancel</a>
+
+      <a class="btn-download3" (click)="saveAlert()">Save</a>
+    </nav>
+<br>
+
+    <!-- MAIN -->
+    <main>
+      <div class="head-title">
+        <div class="left">
+          <h1>{{projectName}}</h1>
+          <ul class="breadcrumb">
+            <li>
+              <a href="#">Project</a>
+            </li>
+            <li><i class='bx bx-chevron-right' ></i></li>
+            <li>
+              <a class="active" >Alerts</a>
+
+            </li>
+
+
+
+          </ul>
+        </div>
+
+      </div>
+
+
+
+    <div class="alertbuttons">
+    <a  class="btn-download3" (click)="goMailSettings()"  >
+      <i class='bx bxs-message' ></i>
+      <span class="text">Mail Settings</span>
+
+    </a>
+      <a  class="btn-download3" (click)="goMailSettings()"  >
+        <i class='bx bxs-message' ></i>
+        <span class="text">Check Rules Set</span>
+
+      </a>
+    <a  class="btn-download3" (click)="openPopup()" >
+      <span class="text">Set a New Alert</span>
+
+    </a>
+
+  </div>
+
+    <ul class="box-info">
+
+      <li>
+        <i class='bx bxs-bell' ></i>
+        <span class="text" >
+          <h3>{{nbAlerts}}</h3>
+          <p>Alerts in Total</p>
+        </span>
+      </li>
+      <li>
+        <i class='bx bxs-cctv' ></i>
+        <span class="text">
+          <h3>{{nbRules}}</h3>
+          <p> Rules in Total
+          </p>
+        </span>
+      </li>
+    </ul>
+
+
+
+  <section>
+
+    <br>
+    <div class="lheader">
+      <h3>Alerts</h3>
+         <!--  <input type="text" id="search" placeholder="Search...">-->
+
+ </div>
+
+    <table>
+      <thead>
+      <tr class="header-row">
+        <th>Microservice Name</th>
+
+        <th class="alertid">Instance</th>
+        <th>Alert Name</th>
+        <th>Job</th>
+        <th>Severity</th>
+        <th >Active At</th>
+
+        <th >State</th>
+        <th class="action">Action</th>
+      </tr>
+      </thead>
+     <tbody>
+
+     <tr *ngFor="let alert of alertArray">
+      <td > Microservices Name</td>
+
+      <td class="alertid">{{ alert.instance }}</td>
+       <td >{{ alert.alertname}}</td>
+       <td >{{ alert.job}}</td>
+       <td >{{ alert.severity}}</td>
+       <td >{{ alert.activeAt | date: 'medium' }}</td>
+       <td>
+        <span id="{{alert.state}}" class="alert-state">{{ alert.state }}</span>
+      </td>
+
+       <td class="action">
+         <div class="lemenuaction">
+           <button mat-icon-button [matMenuTriggerFor]="menu" (click)="getMails(alert)" >
+             <mat-icon>more_vert</mat-icon>
+           </button>
+           <mat-menu #menu="matMenu" >
+             <button mat-menu-item (click)="goMailSettings()">
+               <mat-icon>mail</mat-icon>
+               <span>Manage Mail Receivers</span>
+             </button>
+             <button mat-menu-item (click)="disableAlert(alert)">
+               <mat-icon>notifications_off</mat-icon>
+               <span>{{ buttonState }}</span>
+             </button>
+             <button mat-menu-item (click)="openInfo()">
+               <mat-icon>visibility</mat-icon>
+               <span>More Information</span>
+             </button>
+           </mat-menu>
+         </div>
+       </td>
+     </tr>
+     </tbody>
+    </table>
+
+<br>
+
+  <div class="toast" id="toast-message"></div>
+
+  <div class="toast3" id="toast-message3"></div>
+
+  <div class="toast4" id="toast-message4"></div>
+  <div class="toast2" id="toast-message2"></div>
+  <div class="toast5" id="toast-message5"></div>
+  <div class="toast6" id="toast-message6"></div>
+
+
+  </section>
+
+
+    </main>
+
+    <!-- MAIN -->
+  </section>
+  <!-- CONTENT -->
+  </body>
+

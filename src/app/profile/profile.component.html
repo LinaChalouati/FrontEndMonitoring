@@ -1,0 +1,192 @@
+<!-- SIDEBAR -->
+<section id="sidebar" [ngClass]="status ? 'hide' : ''">
+  <a  class="brand">
+  </a>
+  <ul class="side-menu top">
+    <li >
+      <a href="#">
+        <i class='bx bxs-dashboard' ></i>
+        <span class="text">Home</span>
+      </a>
+    </li>
+    <li class="active">
+      <a >
+        <i class='bx bxs-user' ></i>
+        <span class="text">Profile</span>
+      </a>
+    </li>
+    <li >
+      <a (click)="goAdminsitration()">
+        <i class='bx bxs-folder' ></i>
+        <span class="text">Administration</span>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <i class='bx bxs-doughnut-chart' ></i>
+        <span class="text">Help</span>
+      </a>
+    </li>
+
+
+  </ul>
+  <ul class="side-menu">
+    <li>
+      <a href="#">
+        <i class='bx bxs-cog' ></i>
+        <span class="text">Settings</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" class="logout">
+        <i class='bx bxs-log-out-circle' ></i>
+        <span class="text">Logout</span>
+      </a>
+    </li>
+  </ul>
+</section>
+<!-- SIDEBAR -->
+
+
+
+<!-- CONTENT -->
+<section id="content">
+  <!-- NAVBAR -->
+  <nav>
+    <i (click)="addToggle()" class='bx bx-menu' ></i>
+
+    <a  class="brand">
+      <span class="text"><h3> AES Monitoring Platform</h3></span>
+
+    </a>
+      <div class="menuitems">
+    <i class="bx bxs-home custom-icon" (click)="goHome()"></i>
+
+  </div>
+  </nav>
+  <!-- NAVBAR -->
+
+
+  <!-- MAIN -->
+
+
+  <main>
+    <div class="head-title">
+      <div class="left">
+
+        <h1>Profile</h1>
+
+        <ul class="breadcrumb">
+          <li>
+            <a >Home</a>
+
+          </li>
+          <li><i class='bx bx-chevron-right' ></i></li>
+          <li>
+            <a class="active" routerLink="/projects">Profile</a>
+          </li>
+        </ul>
+
+      </div>
+    </div>
+    <br>
+
+
+    <!-- Font Awesome Link -->
+
+<div class="modal clearfix">
+    <div class="modal-product">
+      <div class="product">
+
+
+
+        <h1 class="product-name">
+          <svg xmlns="http://www.w3.org/2000/svg" width="200" height="200" viewBox="0 0 36 32"><path fill="currentColor" d="M.5 31.983a.503.503 0 0 0 .612-.354c1.03-3.843 5.216-4.839 7.718-5.435c.627-.149 1.122-.267 1.444-.406c2.85-1.237 3.779-3.227 4.057-4.679a.5.5 0 0 0-.165-.473c-1.484-1.281-2.736-3.204-3.526-5.416a.492.492 0 0 0-.103-.171c-1.045-1.136-1.645-2.337-1.645-3.294c0-.559.211-.934.686-1.217a.5.5 0 0 0 .243-.408C10.042 5.036 13.67 1.026 18.12 1l.107.007c4.472.062 8.077 4.158 8.206 9.324a.498.498 0 0 0 .178.369c.313.265.459.601.459 1.057c0 .801-.427 1.786-1.201 2.772a.522.522 0 0 0-.084.158c-.8 2.536-2.236 4.775-3.938 6.145a.502.502 0 0 0-.178.483c.278 1.451 1.207 3.44 4.057 4.679c.337.146.86.26 1.523.403c2.477.536 6.622 1.435 7.639 5.232a.5.5 0 0 0 .966-.26c-1.175-4.387-5.871-5.404-8.393-5.95c-.585-.127-1.09-.236-1.336-.344c-1.86-.808-3.006-2.039-3.411-3.665c1.727-1.483 3.172-3.771 3.998-6.337c.877-1.14 1.359-2.314 1.359-3.317c0-.669-.216-1.227-.644-1.663C27.189 4.489 23.19.076 18.227.005l-.149-.002c-4.873.026-8.889 4.323-9.24 9.83c-.626.46-.944 1.105-.944 1.924c0 1.183.669 2.598 1.84 3.896c.809 2.223 2.063 4.176 3.556 5.543c-.403 1.632-1.55 2.867-3.414 3.676c-.241.105-.721.22-1.277.352c-2.541.604-7.269 1.729-8.453 6.147a.5.5 0 0 0 .354.612z"/></svg>
+        </h1>
+
+        <p class="product-price">
+          Hello {{ userInfo?.user?.firstname }}
+        </p>
+
+      </div>
+
+      <div class="round-shape"></div>
+    </div>
+    <div class="modal-info">
+      <div class="info">
+        <div *ngIf="!isEdit">
+        <h2>Profile Information</h2>
+      </div>
+      <div *ngIf="isEdit">
+        <h2>Editing Profile</h2>
+      </div>
+        <form action="#">
+          <ul class="form-list">
+            <li class="form-list-row">
+              <div class="user">
+                <label >Firstname</label><br>
+                <i class="fas fa-user"></i>
+                <input type="text" required  [readonly]="!isEdit"  [(ngModel)]="firstname"  [ngModelOptions]="{ standalone: true }"  >
+              </div>
+            </li>
+            <br *ngIf="!isEdit">
+            <li class="form-list-row">
+              <div class="user">
+                <label >Lastname</label><br>
+                <i class="fas fa-user"></i><input type="text" required [(ngModel)]="lastname"  [ngModelOptions]="{ standalone: true }" [readonly]="!isEdit">
+              </div>
+            </li>
+            <br *ngIf="!isEdit">
+            <li class="form-list-row">
+              <div class="number">
+                <label>Mail Address</label><br>
+                <i class="far fa-credit-card"></i><input type="text" required  [(ngModel)]="email"  [ngModelOptions]="{ standalone: true }" [readonly]="!isEdit">
+              </div>
+            </li>
+            <br *ngIf="!isEdit">
+
+            <li class="form-list-row" *ngIf="isEdit">
+              <div class="number">
+                <label >Current Password</label><br>
+                <i class="far fa-credit-card"></i><input type="password" required placeholder="Password" [(ngModel)]="password" [ngModelOptions]="{ standalone: true }" >
+              </div>
+            </li>
+            <li class="form-list-row" *ngIf="isEdit">
+              <div class="number">
+                <label >New Password</label><br>
+                <i class="far fa-credit-card"></i><input type="password" required placeholder="New Password" [(ngModel)]="newpassword"  [ngModelOptions]="{ standalone: true }" >
+              </div>
+            </li>
+            <li class="form-list-row" *ngIf="isEdit">
+              <div class="number">
+                <label for="#">Re-Type New Password</label><br>
+                <i class="far fa-credit-card"></i><input type="password" required placeholder="New Password" [(ngModel)]="verifypassword" [ngModelOptions]="{ standalone: true }"  >
+              </div>
+            </li>
+          </ul>
+          <button *ngIf="!isEdit" (click)="editInformation()">Edit Information</button>
+          <br>
+          <br>
+          <br>
+
+          <button *ngIf="isEdit " id="savebtn" (click)="editProfile()">Save</button>
+
+        </form>
+      </div>
+    </div>
+  </div>
+  </main>
+  <!-- MAIN -->
+</section>
+
+
+<!-- CONTENT -->
+<div class="toasts">
+<div class="toast3" id="toast-message3"></div>
+
+<div class="toast4" id="toast-message4"></div>
+<div class="toast2" id="toast-message2"></div>
+<div class="toast5" id="toast-message5"></div>
+<div class="toast6" id="toast-message6"></div>
+
+</div>

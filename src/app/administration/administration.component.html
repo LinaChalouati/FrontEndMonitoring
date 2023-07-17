@@ -1,0 +1,165 @@
+<!-- SIDEBAR -->
+<section id="sidebar" [ngClass]="status ? 'hide' : ''">
+    <a  class="brand">
+    </a>
+    <ul class="side-menu top">
+      <li >
+        <a href="#">
+          <i class='bx bxs-dashboard' ></i>
+          <span class="text">Home</span>
+        </a>
+      </li>
+      <li >
+        <a >
+          <i class='bx bxs-user' ></i>
+          <span class="text">Profile</span>
+        </a>
+      </li>
+      <li  class="active" >
+        <a >
+          <i class='bx bxs-folder' ></i>
+          <span class="text">Administration</span>
+        </a>
+      </li>
+      <li>
+        <a href="#">
+          <i class='bx bxs-doughnut-chart' ></i>
+          <span class="text">Help</span>
+        </a>
+      </li>
+
+
+    </ul>
+    <ul class="side-menu">
+      <li>
+        <a href="#">
+          <i class='bx bxs-cog' ></i>
+          <span class="text">Settings</span>
+        </a>
+      </li>
+      <li>
+        <a href="#" class="logout">
+          <i class='bx bxs-log-out-circle' ></i>
+          <span class="text">Logout</span>
+        </a>
+      </li>
+    </ul>
+  </section>
+  <!-- SIDEBAR -->
+
+
+
+  <!-- CONTENT -->
+  <section id="content">
+    <!-- NAVBAR -->
+    <nav>
+      <i (click)="addToggle()" class='bx bx-menu' ></i>
+   
+      <a  class="brand">
+        <span class="text"><h3> AES Monitoring Platform</h3></span>
+
+      </a>
+      <form></form>
+        <div class="menuitems">
+      <i class="bx bxs-home custom-icon" (click)="goHome()"></i>
+      
+    </div>
+    </nav>
+    <!-- NAVBAR -->
+
+
+    <!-- MAIN -->
+
+
+    <main>
+      <div class="head-title">
+        <div class="left">
+
+          <h1>Hello "username"</h1>
+
+          <ul class="breadcrumb">
+            <li>
+              <a >Home</a>
+
+            </li>
+            <li><i class='bx bx-chevron-right' ></i></li>
+            <li>
+              <a class="active" routerLink="/projects">Administration</a>
+            </li>
+          </ul>
+
+        </div>
+      </div>
+      <br>  
+
+    </main>
+    <!-- MAIN -->
+  </section>
+  <div class="elementsprofile">
+
+
+  <div class="contenue">
+
+
+    <div class="card wallet" (click)="goProjects()">
+      <div class="overlay"></div>
+      <div class="overlay2"></div>
+
+      <div class="circle">
+  
+        <svg xmlns="http://www.w3.org/2000/svg" width="42" height="42" viewBox="0 0 32 32"><path fill="#666666" d="M16 27c-3.6 0-7.1-1.8-9.2-5H12v-2H4v8h2v-3.7c2.5 3 6.1 4.7 10 4.7v-2zm15-4v-2h-2.1c-.1-.6-.4-1.2-.7-1.8l1.5-1.5l-1.4-1.4l-1.5 1.5c-.5-.3-1.1-.6-1.8-.7V15h-2v2.1c-.6.1-1.2.4-1.8.7l-1.5-1.5l-1.4 1.4l1.5 1.5c-.3.5-.6 1.1-.7 1.8H17v2h2.1c.1.6.4 1.2.7 1.8l-1.5 1.5l1.4 1.4l1.5-1.5c.5.3 1.1.6 1.8.7V29h2v-2.1c.6-.1 1.2-.4 1.8-.7l1.5 1.5l1.4-1.4l-1.5-1.5c.3-.5.6-1.1.7-1.8H31zm-7 2c-1.7 0-3-1.3-3-3s1.3-3 3-3s3 1.3 3 3s-1.3 3-3 3zm-4-15h5.2C21.9 4.9 15.1 3.5 10 6.8c-3.1 2-5 5.5-5 9.2H3C3 8.8 8.8 3 16 3c3.9 0 7.5 1.7 10 4.7V4h2v8h-8v-2z"/></svg>
+
+  
+      </div>
+      <p><b>Manage Projects</b></p>
+  </div>
+  
+
+
+  </div>
+  <div class="contenue2" >
+
+    <div class="card wallet" (click)="goUsers()">
+      <div class="overlay"></div>
+      <div class="overlay2"></div>
+
+      <div class="circle">
+  
+  
+        <svg xmlns="http://www.w3.org/2000/svg" width="54" height="44" viewBox="0 0 24 24"><g fill="#666666"><circle cx="12" cy="6" r="4"/><path d="M20 17.5c0 2.485 0 4.5-8 4.5s-8-2.015-8-4.5S7.582 13 12 13s8 2.015 8 4.5Z"/></g></svg>
+  
+      </div>
+      <p><b>Manage Users</b></p>
+  </div>
+  
+  </div>
+
+
+
+  <div class="contenue3">
+
+    <div class="card wallet" (click)="goTeams()">
+      <div class="overlay"></div>
+      <div class="overlay2"></div>
+
+      <div class="circle">
+        <svg xmlns="http://www.w3.org/2000/svg" width="54" height="44" viewBox="0 0 24 24"><path fill="#666" d="M12 10a4 4 0 1 0 0-8a4 4 0 0 0 0 8Zm-6.5 3a2.5 2.5 0 1 0 0-5a2.5 2.5 0 0 0 0 5ZM21 10.5a2.5 2.5 0 1 1-5 0a2.5 2.5 0 0 1 5 0Zm-9 .5a5 5 0 0 1 5 5v6H7v-6a5 5 0 0 1 5-5Zm-7 5c0-.693.1-1.362.288-1.994l-.17.014A3.5 3.5 0 0 0 2 17.5V22h3v-6Zm17 6v-4.5a3.5 3.5 0 0 0-3.288-3.494c.187.632.288 1.301.288 1.994v6h3Z"/></svg>
+  
+      </div>
+      <p><b>Manage Teams</b></p>
+  </div>
+        </div>
+
+
+
+</div>
+  <!-- CONTENT -->
+  <div class="toasts">
+  <div class="toast3" id="toast-message3"></div>
+
+  <div class="toast4" id="toast-message4"></div>
+  <div class="toast2" id="toast-message2"></div>
+  <div class="toast5" id="toast-message5"></div>
+  <div class="toast6" id="toast-message6"></div>
+
+</div>

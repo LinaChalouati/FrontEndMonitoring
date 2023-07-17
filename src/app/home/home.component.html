@@ -1,0 +1,430 @@
+<!-- SIDEBAR -->
+<section id="sidebar" [ngClass]="status ? 'hide' : ''">
+  <a  class="brand">
+  </a>
+  <ul class="side-menu top">
+    <li class="active">
+      <a href="#">
+        <i class='bx bxs-dashboard' ></i>
+        <span class="text">Home</span>
+      </a>
+    </li>
+    <li>
+      <a (click)="goProfile()">
+        <i class='bx bxs-user' ></i>
+        <span class="text">Profile</span>
+      </a>
+    </li>
+    <li *ngIf="isUserAdmin==='ADMIN'" >
+      <a  (click)="goAdminsitration()">
+        <i class='bx bxs-folder' ></i>
+        <span class="text">Administration</span>
+      </a>
+    </li>
+    <li>
+      <a href="#">
+        <i class='bx bxs-doughnut-chart' ></i>
+        <span class="text">Help</span>
+      </a>
+    </li>
+
+
+  </ul>
+  <ul class="side-menu">
+    <li>
+      <a href="#">
+        <i class='bx bxs-cog' ></i>
+        <span class="text">Settings</span>
+      </a>
+    </li>
+    <li>
+      <a href="#" class="logout">
+        <i class='bx bxs-log-out-circle' ></i>
+        <span class="text">Logout</span>
+      </a>
+    </li>
+  </ul>
+</section>
+<!-- SIDEBAR -->
+
+
+
+<!-- CONTENT -->
+<section id="content">
+  <!-- NAVBAR -->
+  <nav>
+    <i (click)="addToggle()" class='bx bx-menu' ></i>
+
+    <a  class="brand">
+      <span class="text"><h3> AES Monitoring Platform</h3></span>
+
+    </a>
+
+
+
+  </nav>
+  <!-- NAVBAR -->
+
+
+  <!-- MAIN -->
+  <div class="dialog-container" *ngIf="showDialog" >
+    <div class="dialog-content" >
+      <h2 class="dialog-title">Delete Confirmation</h2>
+
+      <label>Are you sure you want to remove this User from This Team</label>
+
+
+
+      <div class="dialog-buttons">
+        <button mat-button (click)="deleteProject()" >Delete</button>
+        <button mat-button (click)="closeDialog()">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <div class="head-title">
+      <div class="left">
+
+        <h1>Home</h1>
+
+        <ul class="breadcrumb">
+          <li>
+            <a >Home</a>
+
+          </li>
+          <li><i class='bx bx-chevron-right' ></i></li>
+          <li>
+            <a class="active" routerLink="/projects">Projects</a>
+          </li>
+        </ul>
+
+      </div>
+        <a  class="btn-download" (click)="showPopup = !showPopup" *ngIf="nbprojet !=0" >
+          <i class='bx bxs-cloud-download' ></i>
+          <span class="text">Connect to a New Project</span>
+        </a>
+      <app-popupform *ngIf="showPopup" (closed)="showPopup = false" class="addpopup"></app-popupform>
+
+    </div>
+    <br>
+
+    <ul class="box-info">
+      <li >
+        <i class='bx bxs-calendar-check'></i>
+        <span class="text">
+          <h3>{{userProjectsWithRoles.length}}</h3>
+          <p>My User-Associated Projects</p>
+        </span>
+      </li>
+
+
+      <li>
+        <i class='bx ' >
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path fill="currentColor" d="M12 10a4 4 0 1 0 0-8a4 4 0 0 0 0 8Zm-6.5 3a2.5 2.5 0 1 0 0-5a2.5 2.5 0 0 0 0 5ZM21 10.5a2.5 2.5 0 1 1-5 0a2.5 2.5 0 0 1 5 0Zm-9 .5a5 5 0 0 1 5 5v6H7v-6a5 5 0 0 1 5-5Zm-7 5c0-.693.1-1.362.288-1.994l-.17.014A3.5 3.5 0 0 0 2 17.5V22h3v-6Zm17 6v-4.5a3.5 3.5 0 0 0-3.288-3.494c.187.632.288 1.301.288 1.994v6h3Z"/></svg>
+        </i>
+        <span class="text">
+          <h3>{{userTeamsProjects.length}}</h3>
+          <p>My Associated-Teams Projects</p>
+        </span>
+      </li>
+      <li>
+        <i class='bx' >
+          <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24"><path fill="currentColor" d="M12 22q-2.075 0-3.9-.788t-3.175-2.137q-1.35-1.35-2.137-3.175T2 12q0-2.075.788-3.9t2.137-3.175q1.35-1.35 3.175-2.137T12 2q2.075 0 3.9.788t3.175 2.137q1.35 1.35 2.138 3.175T22 12q0 2.075-.788 3.9t-2.137 3.175q-1.35 1.35-3.175 2.138T12 22Zm-1-2.05V18q-.825 0-1.413-.588T9 16v-1l-4.8-4.8q-.075.45-.138.9T4 12q0 3.025 1.988 5.3T11 19.95Zm6.9-2.55q.5-.55.9-1.188t.662-1.325q.263-.687.4-1.412T20 12q0-2.45-1.363-4.475T15 4.6V5q0 .825-.588 1.413T13 7h-2v2q0 .425-.288.713T10 10H8v2h6q.425 0 .713.288T15 13v3h1q.65 0 1.175.388T17.9 17.4Z"/></svg>
+
+        </i>
+        <span class="text">
+          <h3>{{nbprojet}}</h3>
+          <p>Public Projects</p>
+        </span>
+      </li>
+    </ul>
+    <div class="projectcontainer" *ngIf="nbprojet === 0">
+      <br>
+      <br>
+      <br>
+      <br>
+      <h4>You don't Have Any Connected Projects Yet</h4>
+      <br>
+      <a (click)="showPopup = !showPopup" id="projectbtn"  class="btn-download2"  >
+        <i class='bx bxs-cloud-download' ></i>
+        <span class="text">Connect to a New Project</span>
+      </a>
+    </div>
+
+<div *ngIf="nbprojet !=0">
+
+    <div class="table-data" >
+      <div class="order">
+        <div class="head">
+          <h3>My Projects</h3>
+        </div>
+        <table>
+          <div class="projectcontainer" *ngIf="nbprojet === 0">
+            <h4>You don't Have Any Connected Projects Yet</h4>
+            <br>
+            <a (click)="showPopup = !showPopup" id="projectbtn"  class="btn-download2"  >
+              <i class='bx bxs-cloud-download' ></i>
+              <span class="text">Connect to a New Project</span>
+            </a>
+          </div>
+        </table>
+        <table *ngIf="userProjectsWithRoles.length!=0">
+          <thead>
+          <tr>
+            <th>Project Name</th>
+            <th>Monitoring Process</th>
+            <th>Alerting Process</th>
+            <th>App Type</th>
+            <th>Ip Addresses Associated</th>
+            <th>Deployment</th>
+            <th>Visibility</th>
+            <th>Role</th>
+            <th>Action</th>
+
+          </tr>
+          </thead>
+
+          <tbody>
+          <ng-container *ngFor="let project of userProjectsWithRoles">
+            <tr>
+
+              <td>{{ project.project.projectName }}</td>
+              <td>
+                <div *ngIf="project.project.monitoring === true">
+                  <span class="status completed">Active</span>
+
+                </div>
+                <div *ngIf="project.project.monitoring === false">
+                  <span class="status completed2">Inactive</span>
+
+                </div>
+              </td>
+              <td>
+                <div *ngIf="project.project.alerting === true">
+                  <span class="status completed">Active</span>
+
+                </div>
+                <div *ngIf="project.project.alerting === false">
+                  <span class="status completed2">Inactive</span>
+
+                </div>
+              </td>
+              <td> {{project.project.appType}}</td>
+              <td> {{project.project.ipAddresses}}</td>
+              <td>{{project.project.deployment}}</td>
+              <td>{{project.project.visibility}}</td>
+              <td>{{project.role}}</td>
+
+                <div class="col col-4" data-label="Payment Status" *ngIf="project.role==='EDITOR'">
+                  <div class="lemenuaction">
+                    <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                      <mat-icon>more_vert</mat-icon>
+                    </button>
+                    <mat-menu #menu="matMenu">
+
+                      <button mat-menu-item (click)="goEditProject(project.project.id)">
+                        <mat-icon>edit</mat-icon>
+                        <span>Edit Permission</span>
+                      </button>
+                      <button mat-menu-item (click)="getProjectIDToDelete(project.project.id);openDialog()">
+                        <mat-icon>delete</mat-icon>
+                        <span>Delete Project</span>
+                      </button>
+
+                    </mat-menu>
+                  </div>
+                </div>
+
+            </tr>
+          </ng-container>
+          </tbody>
+        </table>
+
+      </div>
+
+    </div>
+
+
+<div *ngIf="userTeamsProjects.length!=0">
+
+<div class="table-data">
+    <div class="order">
+      <div class="head">
+        <h3>My Teams Projects</h3>
+      </div>
+      <table>
+        <div class="projectcontainer" *ngIf="nbprojet === 0">
+          <h4>You don't Have Any Connected Projects Yet</h4>
+          <br>
+          <a (click)="showPopup = !showPopup" id="projectbtn"  class="btn-download2"  >
+            <i class='bx bxs-cloud-download' ></i>
+            <span class="text">Connect to a New Project</span>
+          </a>
+        </div>
+      </table>
+      <table>
+        <thead>
+        <tr>
+          <th>Team Name</th>
+          <th>Project Name</th>
+          <th>Monitoring Process</th>
+          <th>Alerting Process</th>
+          <th>App Type</th>
+          <th>Ip Addresses Associated</th>
+          <th>Deployment</th>
+          <th>Visibility</th>
+          <th>Role</th>
+          <th>Action</th>
+
+        </tr>
+        </thead>
+        <tbody>
+        <ng-container *ngFor="let project of userTeamsProjects">
+          <tr>
+            <td>{{ project.teamName }}</td>
+
+            <td>{{ project.project.projectName }}</td>
+            <td>
+              <div *ngIf="project.project.monitoring === true">
+                <span class="status completed">Active</span>
+
+              </div>
+              <div *ngIf="project.project.monitoring === false">
+                <span class="status completed2">Inactive</span>
+
+              </div>
+            </td>
+            <td>
+              <div *ngIf="project.project.alerting === true">
+                <span class="status completed">Active</span>
+
+              </div>
+              <div *ngIf="project.project.alerting === false">
+                <span class="status completed2">Inactive</span>
+
+              </div>                </td>
+            <td> {{project.project.appType}}</td>
+            <td> {{project.project.ipAddresses}}</td>
+            <td>{{project.project.deployment}}</td>
+            <td>{{project.project.visibility}}</td>
+            <td>{{project.role}}</td>
+
+            <div class="col col-4" data-label="Payment Status" *ngIf="project.role.toString()==='EDITOR'">
+              <div class="lemenuaction">
+                <button mat-icon-button [matMenuTriggerFor]="menu" aria-label="Example icon-button with a menu">
+                  <mat-icon>more_vert</mat-icon>
+                </button>
+                <mat-menu #menu="matMenu">
+
+                  <button mat-menu-item (click)="goEditProject(project.project.id)">
+                    <mat-icon>edit</mat-icon>
+                    <span>Edit Permission</span>
+                  </button>
+                  <button mat-menu-item (click)="getProjectIDToDelete(project.project.id);openDialog()">
+                    <mat-icon>delete</mat-icon>
+                    <span>Delete Project</span>
+                  </button>
+
+
+
+                </mat-menu>
+              </div>
+            </div>
+
+          </tr>
+        </ng-container>
+        </tbody>
+      </table>
+
+    </div>
+
+  </div>
+
+</div>
+
+
+
+  <div *ngIf="publicProjects.length!=0">
+
+
+    <div class="table-data">
+      <div class="order">
+        <div class="head">
+          <h3>Other Public Projects</h3>
+        </div>
+    <table>
+      <div class="projectcontainer" *ngIf="nbprojet === 0">
+        <h4>You don't Have Any Connected Projects Yet</h4>
+        <br>
+        <a (click)="showPopup = !showPopup" id="projectbtn"  class="btn-download2"  >
+          <i class='bx bxs-cloud-download' ></i>
+          <span class="text">Connect to a New Project</span>
+        </a>
+      </div>
+    </table>
+        <table>
+          <thead>
+          <tr>
+            <th>Project Name</th>
+            <th>Monitoring Process</th>
+            <th>Alerting Process</th>
+            <th>App Type</th>
+            <th>Ip Addresses Associated</th>
+            <th>Deployment</th>
+            <th>Visibility</th>
+
+          </tr>
+          </thead>
+          <tbody>
+          <ng-container *ngFor="let project of publicProjects">
+            <tr>
+              <td>{{ project.projectName }}</td>
+              <td>
+                <div *ngIf="project.monitoring === true">
+                  <span class="status completed">Active</span>
+
+                </div>
+                <div *ngIf="project.monitoring === false">
+                  <span class="status completed2">Not Active</span>
+
+                </div>
+              </td>
+              <td>
+                <div *ngIf="project.alerting === true">
+                  <span class="status completed">Active</span>
+
+                </div>
+                <div *ngIf="project.alerting === false">
+                  <span class="status completed2">Not Active</span>
+
+                </div>                </td>
+              <td> {{project.appType}}</td>
+              <td> {{project.ipAddresses}}</td>
+              <td>{{project.deployment}}</td>
+              <td>{{project.visibility}}</td>
+            </tr>
+          </ng-container>
+          </tbody>
+        </table>
+
+      </div>
+
+    </div>
+</div>
+</div>
+
+
+  </main>
+  <!-- MAIN -->
+</section>
+<!-- CONTENT -->
+<div class="toasts">
+<div class="toast3" id="toast-message3"></div>
+
+<div class="toast4" id="toast-message4"></div>
+<div class="toast2" id="toast-message2"></div>
+<div class="toast5" id="toast-message5"></div>
+<div class="toast6" id="toast-message6"></div>
+
+</div>
